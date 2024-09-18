@@ -1,0 +1,42 @@
+{% extends 'library/base.html' %}
+
+{% block content %}
+<h1 class="text-2xl font-semibold mb-4">Transactions</h1>
+
+<table class="min-w-full bg-white shadow-md rounded overflow-hidden">
+    <thead>
+        <tr class="bg-gray-200 text-gray-600 text-left text-sm uppercase font-semibold">
+            <th class="p-4">Member</th>
+            <th class="p-4">Book</th>
+            <th class="p-4">Issue Date</th>
+            <th class="p-4">Return Date</th>
+            <th class="p-4">Fee (KES)</th>
+            <th class="p-4">Return Book</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+            <tr class="border-t">
+                <td class="p-4">{{ transaction.member.name }}</td>
+                <td class="p-4">{{ transaction.book.title }}</td>
+                <td class="p-4">{{ transaction.issue_date }}</td>
+                <td class="p-4">
+                    {% if transaction.return_date %}
+                        {{ transaction.return_date }}
+                    {% else %}
+                        Not returned
+                    {% endif %}
+                </td>
+                <td class="p-4">{{ transaction.fee }}</td>
+                <td class="p-4">
+                    {% if not transaction.return_date %}
+                        <a href="{% url 'return_book' transaction.id %}" class="bg-blue-500 text-white px-4 py-2 rounded">Return</a>
+                    {% else %}
+                        Returned
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'library/base.html' %}
+
+{% block content %}
+<h1 class="text-2xl font-semibold mb-4">Books</h1>
+
+<form method="GET" action="{% url 'search_books' %}" class="mb-4">
+    <input type="text" name="q" placeholder="Search by title or author" class="border p-2 w-1/2" value="{{ request.GET.q }}">
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded ml-2">Search</button>
+</form>
+
+<!-- <a href="{% url 'book_create' %}" class="bg-green-500 text-white px-4 py-2 rounded mb-4 inline-block">Add Book</a> -->
+
+<ul class="list-disc pl-6">
+    {% for book in books %}
+        <li class="mb-2">{{ book.title }} by {{ book.author }} - Stock: {{ book.stock }}
+            <a href="{% url 'book_update' book.pk %}" class="text-blue-500 hover:underline ml-4">Edit</a>
+            <a href="{% url 'book_delete' book.pk %}" class="text-red-500 hover:underline ml-4">Delete</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
