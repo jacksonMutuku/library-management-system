@@ -14,8 +14,7 @@ def transaction_list(request):
     return render(request, 'library/transaction_list.html', {'transactions': transactions})
 
 def book_list(request):
-    # Always define `books` before using it
-    books = Book.objects.all()  # Fetch all books from the database
+    books = Book.objects.all() 
     print("Books:", books) 
     return render(request, 'library/book_list.html', {'books': books})
 
@@ -43,8 +42,6 @@ def book_delete(request, pk):
     book.delete()
     return redirect('book_list')
 
-# Similar views for Members
-# Member CRUD
 def member_list(request):
     members = Member.objects.all()
     print("members", members)
@@ -54,16 +51,7 @@ def member_create(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
-        outstanding_debt_str = request.POST.get('outstanding_debt', '0.0')
-
-        try:
-            outstanding_debt = float(outstanding_debt_str)
-            if outstanding_debt < 0:
-                outstanding_debt = 0.0  # Default to 0.0 if the value is negative
-        except ValueError:
-            outstanding_debt = 0.0  # Default to 0.0 if conversion fails
-
-        Member.objects.create(name=name, email=email, outstanding_debt=outstanding_debt)
+        Member.objects.create(name=name, email=email)
         return redirect('member_list')
     
     return render(request, 'library/member_form.html', {'member': None})
@@ -84,6 +72,9 @@ def member_delete(request, pk):
     return redirect('member_list')
 
 def issue_book(request):
+    out_of_stock = False
+    outstanding_debt = False
+
     if request.method == 'POST':
         member_id = request.POST.get('member')
         book_id = request.POST.get('book')
@@ -92,30 +83,43 @@ def issue_book(request):
             member = Member.objects.get(id=member_id)
             book = Book.objects.get(id=book_id)
 
-            # Check if the book is available in stock
-            if book.stock > 0:
-                # Create a transaction and reduce the stock
-                transaction = Transaction.objects.create(
-                    member=member,
-                    book=book,
-                    issue_date=timezone.now(),
-                    return_date=None
-                )
-                book.stock -= 1
-                book.save()
-                return redirect('transaction_list')  # Redirect after successful issue
-            else:
-                return HttpResponse("Book is out of stock.")  # Handle case where book is not in stock
+            # Check if member has outstanding debt
+            if member.outstanding_debt > 500:
+                outstanding_debt = True
+
+            # Check if the book is out of stock
+            if book.stock <= 0:
+                out_of_stock = True
+
+            # If there is an error, render the error template
+            if out_of_stock or outstanding_debt:
+                return render(request, 'library/error_page.html', {
+                    'out_of_stock': out_of_stock,
+                    'outstanding_debt': outstanding_debt
+                })
+
+            # If no errors, proceed with issuing the book
+            transaction = Transaction.objects.create(
+                member=member,
+                book=book,
+                issue_date=timezone.now(),
+                return_date=None
+            )
+            book.stock -= 1
+            book.save()
+            return redirect('transaction_list')
+
         except Member.DoesNotExist:
             return HttpResponse("Member does not exist.")
         except Book.DoesNotExist:
             return HttpResponse("Book does not exist.")
     
-    # GET request - Display the form
     members = Member.objects.all()
     books = Book.objects.all()
-    return render(request, 'library/issue_book.html', {'members': members, 'books': books})
-
+    return render(request, 'library/issue_book.html', {
+        'members': members,
+        'books': books
+    })
 
 def search_books(request):
     query = request.GET.get('q')
@@ -129,21 +133,17 @@ def search_books(request):
 
 def return_book(request, transaction_id):
     transaction = get_object_or_404(Transaction, id=transaction_id)
-
-    # Check if the book has already been returned
     if not transaction.return_date:
-        transaction.return_date = date.today()  # Mark the return date
+        transaction.return_date = date.today()  
         days_issued = (transaction.return_date - transaction.issue_date).days
 
-        # Rent fee (you can define how much to charge per day)
+
         rent_fee_per_day = 50
         transaction.fee = days_issued * rent_fee_per_day
 
-        transaction.book.stock += 1  # Increase the stock when the book is returned
+        transaction.book.stock += 1  
         transaction.book.save()
         transaction.save()
 
     return redirect('transaction_list')
 
-
-# return render(request, 'library/member_form.html')
