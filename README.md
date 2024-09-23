@@ -27,6 +27,7 @@ A Django-based Library Management System for managing books, members, and transa
 git clone https://github.com/your-username/library-management-system.git
 cd library-management-system
 
+```
 some  screen shot of the system include
 ![Screenshot 2024-09-18 at 22 36 19](https://github.com/user-attachments/assets/3c60074c-fe5b-4cc9-87fe-6bd2ea5b27b0)
 ![Screenshot 2024-09-18 at 22 38 08](https://github.com/user-attachments/assets/af92ec3a-eeed-4c69-aa16-62d428d945d8)
