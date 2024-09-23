@@ -83,22 +83,20 @@ def issue_book(request):
             member = Member.objects.get(id=member_id)
             book = Book.objects.get(id=book_id)
 
-            # Check if member has outstanding debt
+            
             if member.outstanding_debt > 500:
                 outstanding_debt = True
 
-            # Check if the book is out of stock
+            
             if book.stock <= 0:
                 out_of_stock = True
 
-            # If there is an error, render the error template
+            
             if out_of_stock or outstanding_debt:
                 return render(request, 'library/error_page.html', {
                     'out_of_stock': out_of_stock,
                     'outstanding_debt': outstanding_debt
                 })
-
-            # If no errors, proceed with issuing the book
             transaction = Transaction.objects.create(
                 member=member,
                 book=book,
