@@ -28,9 +28,9 @@ git clone https://github.com/your-username/library-management-system.git
 cd library-management-system
 
 some  screen shot of the system include
-![alt text](<Screenshot 2024-09-18 at 22.36.19.png>)
-![alt text](<Screenshot 2024-09-18 at 22.38.08.png>)
-![alt text](<Screenshot 2024-09-18 at 22.39.15.png>)
-![alt text](<Screenshot 2024-09-18 at 22.39.47.png>) 
-![alt text](<Screenshot 2024-09-18 at 22.39.34.png>) 
-![alt text](<Screenshot 2024-09-18 at 22.39.26.png>)
+![Screenshot 2024-09-18 at 22 36 19](https://github.com/user-attachments/assets/3c60074c-fe5b-4cc9-87fe-6bd2ea5b27b0)
+![Screenshot 2024-09-18 at 22 38 08](https://github.com/user-attachments/assets/af92ec3a-eeed-4c69-aa16-62d428d945d8)
+![Screenshot 2024-09-18 at 22 39 15](https://github.com/user-attachments/assets/05fdcd93-e696-404b-b3f9-4bcdb47e8269)
+![Screenshot 2024-09-18 at 22 39 26](https://github.com/user-attachments/assets/b9e43a22-455c-44ca-ae15-bf954ec6f91c)
+![Screenshot 2024-09-18 at 22 39 34](https://github.com/user-attachments/assets/d99697e7-1251-422f-a197-db63eaf0b024)
+![Screenshot 2024-09-18 at 22 39 47](https://github.com/user-attachments/assets/7a4f2c84-47ec-4ae0-9c00-563aa89ec61b)
